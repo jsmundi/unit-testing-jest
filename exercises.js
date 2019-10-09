@@ -117,7 +117,7 @@ var filter = function (array, filterFunction) {
 
     const resultArray = [];
     for (let i = 0; i < array.length; i++) {
-        if(filterFunction(array[i], i, array)){
+        if (filterFunction(array[i], i, array)) {
             resultArray.push(array[i]);
         }
     }
@@ -132,7 +132,13 @@ var filter = function (array, filterFunction) {
  * result of reduce is the _final_ aggregate value obtained after processing the last element.
  */
 var reduce = function (array, reductionFunction, seedValue) {
-    // Your code goes here
+
+    let accumulator = seedValue;
+    for (let i = 0; i < array.length; i++) {
+        accumulator = reductionFunction(accumulator, array[i]);
+    }
+    return accumulator;
+
 };
 
 /* Finally, let's write reduceRight. As you may have guessed, reduceRight is exactly like reduce,
@@ -140,7 +146,35 @@ var reduce = function (array, reductionFunction, seedValue) {
  * reverse order (right-to-left).
  */
 var reduceRight = function (array, reductionFunction, seedValue) {
-    // Your code goes here
+
+    const revArray = array.reverse();
+    let accumulator;
+
+
+    if (Array.isArray(array)) {
+
+        if (seedValue) {
+            accumulator = seedValue;
+        } else {
+            accumulator = 0;
+        }
+        for (let i = 0; i < revArray.length; i++) {
+            accumulator = reductionFunction(accumulator, revArray[i]);
+        }
+        return accumulator;
+    } else {
+
+        if (seedValue) {
+            accumulator = seedValue;
+        } else {
+            accumulator = "";
+        }
+        for (let key in revArray) {
+            accumulator = reductionFunction(accumulator, revArray[key], key);
+        }
+        return accumulator;
+    }
+
 };
 
 
@@ -183,7 +217,49 @@ var reduceRight = function (array, reductionFunction, seedValue) {
  */
 
 var stringify = function (object) {
-    // Your code goes here
+
+    let result = '';
+
+    if (object === null) {
+        result = 'null';
+        return result;
+    } else if (typeof object === 'number') {
+        result = object.toString();
+        return result;
+    } else if (typeof object === 'boolean') {
+        result = object.toString();
+        return result;
+    } else if (typeof object === 'undefined') {
+        result = 'undefined';
+        return result;
+    } else if (typeof object === 'string') {
+        result = object.toString();
+        return result;
+    } else if (typeof object === 'function') {
+        throw new Error('Illegal argument');
+    } else if (Array.isArray(object)) {
+        result += '[';
+        for (let i = 0; i < object.length; i++) {
+            result += stringify(object[i]);
+            if (i !== object.length - 1) {
+                result += ', ';
+            }
+        }
+        result += ']';
+        return result;
+    } else if (typeof object === 'object') {
+        result += '{';
+        let key = Object.keys(object);
+        for (let i = 0; i < key.length; i++) {
+            result += stringify(object[key[i]]);
+            if (i !== object.length - 1) {
+                result += ', ';
+            }
+        }
+        result += '}';
+        return result;
+    }
+
 };
 
 /*

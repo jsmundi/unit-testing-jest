@@ -1,5 +1,6 @@
 const functions = require('./exercises');
 
+
 describe("Sum", () => {
 
     test("Sum of an array", () => {
@@ -43,4 +44,55 @@ describe("Filter", () => {
         const exp = ["exuberant", "destruction", "present"];
         expect(functions.highorderMethods.filter(arr, x=>x.length>6)).toEqual(exp);
     });
+});
+
+describe("Reduce", () => {
+
+    test("Custom reduce function", () => {
+        const arr = [1, 2, 3, 4];
+        const reducer = (accumulator, currentValue) => accumulator + currentValue;
+        expect(functions.highorderMethods.reduce(arr, reducer, 1)).toEqual(11);
+    });
+});
+
+describe("Reduce Right", () => {
+
+    test("Custom reduce right function", () => {
+        const arr = [1, 2, 3, 4];
+        const reducer = (accumulator, currentValue) => accumulator + currentValue;
+        expect(functions.highorderMethods.reduceRight(arr, reducer, 1)).toEqual(11);
+    });
+});
+
+describe("stringify", () => {
+
+    test("Number", () => {
+        expect(functions.stringifyMethods.mystringify(123)).toEqual('123');
+    });
+    test("Boolean", () => {
+        expect(functions.stringifyMethods.mystringify(true)).toEqual('true');
+    });
+    test("String", () => {
+        expect(functions.stringifyMethods.mystringify("Hello World")).toEqual('Hello World');
+    });
+    test("Array", () => {
+        expect(functions.stringifyMethods.mystringify([1, 2, 3])).toEqual("[1, 2, 3]");
+    });
+    test("Null", () => {
+        expect(functions.stringifyMethods.mystringify(null)).toEqual("null");
+    });
+    test("undefined", () => {
+        expect(functions.stringifyMethods.mystringify(undefined)).toEqual("undefined");
+    });
+    test('Function', () => {
+        expect(() => {
+            functions.stringifyMethods.mystringify((x, y) => x + y);
+        }).toThrow();
+    });
+    test("Object", () => {
+        const obj = {x: 5, y: 6};
+        const exp = "{ x: 5, y: 6 }";
+        expect(functions.stringifyMethods.mystringify(obj)).toEqual(exp);
+    });
+
 });
