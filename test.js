@@ -91,7 +91,7 @@ describe("stringify", () => {
     });
     test("Object", () => {
         const obj = {x: 5, y: 6};
-        const exp = "{ x: 5, y: 6 }";
+        const exp = "{x: 5, y: 6}";
         expect(functions.stringifyMethods.mystringify(obj)).toEqual(exp);
     });
 

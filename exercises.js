@@ -133,11 +133,31 @@ var filter = function (array, filterFunction) {
  */
 var reduce = function (array, reductionFunction, seedValue) {
 
-    let accumulator = seedValue;
-    for (let i = 0; i < array.length; i++) {
-        accumulator = reductionFunction(accumulator, array[i]);
+    let accumulator;
+
+    if (Array.isArray(array)) {
+
+        if (seedValue) {
+            accumulator = seedValue;
+        } else {
+            accumulator = 0;
+        }
+        for (let i = 0; i < array.length; i++) {
+            accumulator = reductionFunction(accumulator, array[i]);
+        }
+        return accumulator;
+    } else {
+
+        if (seedValue) {
+            accumulator = seedValue;
+        } else {
+            accumulator = "";
+        }
+        for (let key in array) {
+            accumulator = reductionFunction(accumulator, array[key], key);
+        }
+        return accumulator;
     }
-    return accumulator;
 
 };
 
@@ -149,7 +169,6 @@ var reduceRight = function (array, reductionFunction, seedValue) {
 
     const revArray = array.reverse();
     let accumulator;
-
 
     if (Array.isArray(array)) {
 
@@ -248,11 +267,14 @@ var stringify = function (object) {
         result += ']';
         return result;
     } else if (typeof object === 'object') {
+        let i = 0;
         result += '{';
-        let key = Object.keys(object);
-        for (let i = 0; i < key.length; i++) {
-            result += stringify(object[key[i]]);
-            if (i !== object.length - 1) {
+        for (let [key, value] of Object.entries(object)) {
+            i++;
+            result += stringify(key);
+            result += ': ';
+            result += stringify(value);
+            if (i !== (Object.keys(object).length)) {
                 result += ', ';
             }
         }
